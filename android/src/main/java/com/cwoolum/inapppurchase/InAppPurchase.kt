@@ -12,6 +12,7 @@ import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 @NativePlugin(
@@ -26,6 +27,8 @@ class InAppPurchase : Plugin(), PurchasesUpdatedListener {
             .build()
 
     protected val TAG = "google.payments"
+
+    private val skuList: ArrayList<String> = ArrayList();
 
     private var manifestObject: JSONObject? = null
 
@@ -60,17 +63,19 @@ class InAppPurchase : Plugin(), PurchasesUpdatedListener {
     }
 
     @PluginMethod
-    fun init(call: PluginCall) {
+    fun initialize(call: PluginCall) {
+
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    // The BillingClient is ready. You can query purchases here.
+                    call.resolve()
+                }else{
+                    call.error("An error occurred connecting to the billing service. Response Code: ${billingResult.responseCode}")
                 }
             }
 
             override fun onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
+                billingClient.startConnection()
             }
         })
     }

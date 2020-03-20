@@ -1,5 +1,5 @@
 import { WebPlugin } from '@capacitor/core';
-import { InAppPurchasePlugin } from './definitions';
+import { InAppPurchasePlugin, SkuType } from './definitions';
 
 export class InAppPurchaseWeb extends WebPlugin implements InAppPurchasePlugin {
   constructor() {
@@ -7,6 +7,21 @@ export class InAppPurchaseWeb extends WebPlugin implements InAppPurchasePlugin {
       name: 'InAppPurchase',
       platforms: ['web']
     });
+  }
+  consumePurchase(options: { purchaseToken: string; }): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+  subscribe(options: { type: SkuType; receipt: String; }): Promise<{ transactionId: String; productId: String; token: String; }> {
+    throw new Error("Method not implemented.");
+  }
+  restorePurchases(): Promise<{ data: import("./definitions").PurchaseDetail[]; }> {
+    throw new Error("Method not implemented.");
+  }
+  getSkuDetails(options: { skus: string[]; skuType: SkuType; }): Promise<{ data: import("./definitions").SkuDetail[]; }> {
+    throw new Error("Method not implemented.");
+  }
+  initialize(options: { skus: String[]; }): Promise<void> {
+    throw new Error("Method not implemented.");
   }
 
   async echo(options: { value: string }): Promise<{value: string}> {

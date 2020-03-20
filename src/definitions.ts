@@ -4,7 +4,7 @@ declare module "@capacitor/core" {
   }
 }
 
-enum SkuType {
+export enum SkuType {
   InApp = "inapp",
   Subs = "subs"
 }

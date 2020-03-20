@@ -35,5 +35,5 @@ export interface InAppPurchasePlugin {
   subscribe(options: { type: SkuType, receipt: String }): Promise<{ transactionId: String, productId: String, token: String }>;
   restorePurchases(): Promise<{ data: PurchaseDetail[] }>;
   getSkuDetails(options: { skus: string[], skuType: SkuType }): Promise<{ data: SkuDetail[] }>;
-  initialize(options: { skus: String[] }): Promise<void>;
+  initialize(): Promise<void>;
 }

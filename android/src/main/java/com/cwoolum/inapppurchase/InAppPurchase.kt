@@ -19,16 +19,9 @@ import kotlin.collections.ArrayList
         requestCodes = [InAppPurchase.CREATE_PURCHASE]
 )
 class InAppPurchase : Plugin(), PurchasesUpdatedListener {
-
-
-    private val billingClient: BillingClient = BillingClient
-            .newBuilder(context)
-            .setListener(this)
-            .build()
+    private lateinit var billingClient: BillingClient
 
     protected val TAG = "google.payments"
-
-    private val skuList: ArrayList<String> = ArrayList();
 
     private var manifestObject: JSONObject? = null
 
@@ -64,6 +57,11 @@ class InAppPurchase : Plugin(), PurchasesUpdatedListener {
 
     @PluginMethod
     fun initialize(call: PluginCall) {
+        billingClient = BillingClient
+                .newBuilder(context.applicationContext)
+                .setListener(this)
+                .enablePendingPurchases()
+                .build()
 
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
@@ -75,7 +73,7 @@ class InAppPurchase : Plugin(), PurchasesUpdatedListener {
             }
 
             override fun onBillingServiceDisconnected() {
-                billingClient.startConnection()
+
             }
         })
     }

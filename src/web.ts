@@ -20,7 +20,7 @@ export class InAppPurchaseWeb extends WebPlugin implements InAppPurchasePlugin {
   getSkuDetails(options: { skus: string[]; skuType: SkuType; }): Promise<{ data: import("./definitions").SkuDetail[]; }> {
     throw new Error("Method not implemented.");
   }
-  initialize(options: { skus: String[]; }): Promise<void> {
+  initialize(): Promise<void> {
     throw new Error("Method not implemented.");
   }
 

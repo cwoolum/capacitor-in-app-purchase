@@ -9,6 +9,14 @@ export enum SkuType {
   Subs = "subs"
 }
 
+export enum SubscriptionPeriod{
+  P1W,
+  P1M,
+  P3M,
+  P6M,
+  P1Y
+}
+
 export interface PurchaseDetail {
   orderId: string;
   packageName: string;
@@ -28,6 +36,7 @@ export interface SkuDetail {
   price: number;
   type: SkuType,
   currency: string;
+  subscriptionPeriod: SubscriptionPeriod
 }
 
 export interface InAppPurchasePlugin {

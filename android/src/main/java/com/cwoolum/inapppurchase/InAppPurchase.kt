@@ -155,6 +155,7 @@ class InAppPurchase : Plugin(), PurchasesUpdatedListener {
                     detailsJson.put("price", skuDetails.price)
                     detailsJson.put("type", skuDetails.type)
                     detailsJson.put("currency", skuDetails.priceCurrencyCode)
+                    detailsJson.put("subscriptionPeriod", skuDetails.subscriptionPeriod)
                     skuResponseArray.put(detailsJson)
                 }
             }

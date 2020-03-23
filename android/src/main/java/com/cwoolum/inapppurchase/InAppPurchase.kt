@@ -5,6 +5,8 @@ import android.util.Log
 import com.android.billingclient.api.*
 import com.getcapacitor.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONException
@@ -127,7 +129,7 @@ class InAppPurchase : Plugin(), PurchasesUpdatedListener {
     }
 
     @PluginMethod
-    suspend fun getSkuDetails(call: PluginCall) {
+    fun getSkuDetails(call: PluginCall) {
         val moreSkus: MutableList<String> = ArrayList()
 
         val skus = call.data.getJSONArray("skus")
@@ -138,27 +140,29 @@ class InAppPurchase : Plugin(), PurchasesUpdatedListener {
             Log.d(TAG, "get sku:" + skus.getString(i))
         }
 
-        val skuDetailsResult = getSkuDetailsInternal(moreSkus, skuType)
+        runBlocking {
+            val skuDetailsResult = getSkuDetailsInternal(moreSkus, skuType)
 
-        val skuResponseArray = JSONArray()
+            val skuResponseArray = JSONArray()
 
-        val skuList = skuDetailsResult.skuDetailsList
-        if (skuList != null) {
-            for (skuDetails in skuList) {
-                val detailsJson = JSONObject()
-                detailsJson.put("productId", skuDetails.sku)
-                detailsJson.put("title", skuDetails.title)
-                detailsJson.put("description", skuDetails.description)
-                detailsJson.put("price", skuDetails.price)
-                detailsJson.put("type", skuDetails.type)
-                detailsJson.put("currency", skuDetails.priceCurrencyCode)
-                skuResponseArray.put(detailsJson)
+            val skuList = skuDetailsResult.skuDetailsList
+            if (skuList != null) {
+                for (skuDetails in skuList) {
+                    val detailsJson = JSONObject()
+                    detailsJson.put("productId", skuDetails.sku)
+                    detailsJson.put("title", skuDetails.title)
+                    detailsJson.put("description", skuDetails.description)
+                    detailsJson.put("price", skuDetails.price)
+                    detailsJson.put("type", skuDetails.type)
+                    detailsJson.put("currency", skuDetails.priceCurrencyCode)
+                    skuResponseArray.put(detailsJson)
+                }
             }
-        }
 
-        val response = JSObject();
-        response.put("data", skuResponseArray)
-        call.resolve(response);
+            val response = JSObject();
+            response.put("data", skuResponseArray)
+            call.resolve(response);
+        }
     }
 
     private suspend fun getSkuDetailsInternal(moreSkus: MutableList<String>, skuType: String): SkuDetailsResult {
